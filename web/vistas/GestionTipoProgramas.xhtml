@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="frmFactores">
+            <p:fieldset id="fieldsetTipoPrograma" legend="Tipo Programa">
+                <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false" />
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo" onclick="display_black('frmFactores:fieldsetTipoPrograma')"/>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2">
+                    <p:fieldset id="fieldsetRegistroTipoPrograma" legend="Registro Tipo Pregunta" styleClass="fieldsetDatos">
+                        <h:panelGrid columns="2">
+
+                            <p:outputLabel for="inputCodigoTipoPrograma" value="Codigo"/>
+                            <p:inputText id="inputCodigoTipoPrograma" label="Codigo" value="#{controllerTipoPrograma.tipoPrograma.codigo}" size="40">
+                                <f:validator validatorId="validarCamposObligatorios"/>
+                            </p:inputText>
+
+                            <p:outputLabel for="inputDescripcionTipoPrograma" value="Descripcion"/>
+                            <p:inputTextarea id="inputDescripcionTipoPrograma" value="#{controllerTipoPrograma.tipoPrograma.descripcion}" styleClass="inputDescripcion">
+                            </p:inputTextarea>
+
+
+                            <p:outputLabel value="Estado"/>
+                            <p:selectOneMenu id="selectEstado" value="#{controllerTipoPrograma.estado.idEstado}" style="width: 150px;">
+                                <f:selectItems value="#{controllerTipoPrograma.listaEstados}" var="estados" 
+                                               itemLabel="#{estados.nombre}" itemValue="#{estados.idEstado}"/>
+                            </p:selectOneMenu>
+
+
+                            <p:commandButton value="Guardar"  actionListener="#{controllerTipoPrograma.guardarTipoPrograma()}" process="@this, fieldsetRegistroTipoPrograma" oncomplete="limpiar('tipoPrograma')" update="tableTipoPrograma, growl"/>
+                            <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldsetRegistroTipoPrograma', 'tipoPrograma')"/>
+
+                        </h:panelGrid>   
+                    </p:fieldset>
+                </h:panelGrid>
+                <br/>
+                <br/>
+                <p:dataTable id="tableTipoPrograma" value="#{controllerTipoPrograma.listaTipoPrograma}" var="TipoPrograma">
+                    <p:column headerText="codigo">
+                        <p:outputLabel value="#{TipoPrograma.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{TipoPrograma.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandButton value="Editar" actionListener="#{controllerTipoPrograma.abrirDialog(TipoPrograma.idTipoPrograma)}" process="@this"/>
+                        <p:commandButton value="Desactivar" actionListener="#{controllerTipoPrograma.desactivarTipoPrograma(TipoPrograma.idTipoPrograma)}" update="tableTipoPrograma" process="@this">
+                             <p:confirm header="Confirmacion" message="Desea Desactivar Tipo Programa Seleccionado ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            
+            <p:dialog id="dialogoEditarTipoPrograma" header="Editar Factor" modal="true" widgetVar="dialogoEditarTipoPrograma">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="inputCodigoEditTipoPrograma" value="Codigo"/>
+                        <p:inputText id="inputCodigoEditTipoPrograma"  label="Codigo"  value="#{controllerTipoPrograma.tipoProgramaEdit.codigo}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcionEditTipoPrograma" value="Descripcion"/>
+                        <p:inputText id="inputDescripcionEditTipoPrograma" label="Descripcion" value="#{controllerTipoPrograma.tipoProgramaEdit.descripcion}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:commandButton value="Guardar" actionListener="#{controllerTipoPrograma.editarTipoPrograma()}" update="growl"  process="@this,dialogoEditarTipoPrograma"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialogoEditarTipoPrograma').hide();" process="@this"/>
+                    </h:panelGrid>
+                </p:dialog>
+            
+             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            
+        </h:form>
+    </h:body>
+</html>
+

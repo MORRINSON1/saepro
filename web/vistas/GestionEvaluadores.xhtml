@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="frmFactores">
+            <p:fieldset id="fieldsetEvaluadores" legend="Datos del Evaluador">
+                <p:fieldset legend="Evaluador">
+                <table>
+                    <tr>
+                        <td>
+                            <p:outputLabel value="Identificacion: " for="inputIdentificacionEvaluador"/>
+                        </td>
+                        <td>
+                            <p:inputText id="inputIdentificacionEvaluador" />
+                        </td>
+                        <td>
+                            <p:outputLabel value="Rango: " />
+                        </td>
+                        <td>
+                            <p:selectOneMenu>
+                                <f:selectItem itemLabel="Rangos"/>
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                </table>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nombre " for="inputNombreEvaluador"/>
+                    <p:inputText id="inputNombreEvaluador" />
+
+                    <p:outputLabel value="Apellidos " for="inputApellidosEvaluador"/>
+                    <p:inputText id="inputApellidosEvaluador" />
+
+                    <p:outputLabel value="Usuario " for="inputUsuarioEvaluador"/>
+                    <p:inputText id="inputUsuarioEvaluador" />
+
+                    <p:outputLabel value="Contraseña " for="inputContrasenaEvaluador"/>
+                    <p:inputText id="inputContrasenaEvaluador" />
+
+                    <p:outputLabel value="Area Responsable " />
+                    <p:selectOneMenu>
+                        <f:selectItem itemLabel="Areas"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <br/>
+                <br/>
+                </p:fieldset>
+                <br/>
+                <br/>
+                <p:fieldset id="fieldsetProgramasAlternativas" legend="Programas">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Autoevaluacion: "/>
+                        <p:selectOneMenu>
+                            <f:selectItem itemLabel="Areas"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Programa: "/>
+                        <p:selectOneMenu >
+                            <f:selectItems value="#{controllerEvaluador.listaProgramas}" var="progama"
+                                           itemLabel="#{progama.codigo} - #{progama.nombre} ">
+                            </f:selectItems>
+                        </p:selectOneMenu>
+
+                        <h:panelGrid columns="3">
+                            <p:outputLabel />
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel value="Tipo Fuente: "/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu>
+                                    <f:selectItem itemLabel="Areas"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:commandButton value="Agregar"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <p:dataTable>
+                        <p:column headerText="Programa">
+
+                        </p:column>
+                        <p:column headerText="Adm.">
+
+                        </p:column>
+                        <p:column headerText="Fuente">
+
+                        </p:column>
+                        <p:column headerText="Opcion">
+                            <p:commandButton value="Eliminar"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:fieldset>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Guardar"/>
+                    <p:commandButton value="Cancelar"/> 
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>
+

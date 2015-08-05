@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+    </h:head>
+
+    <h:body>
+        <h:form id="frmFactores">
+            <p:fieldset id="fielTipoPregunta" legend="Tipo de Preguntas" >
+                <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="true" />
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo"  onclick="display_black('frmFactores:fieldsetTipoPregunta'), display_black('frmFactores:fieldsetAlternativas')"/>
+                </h:panelGrid>
+
+                <p:fieldset id="fieldsetTipoPregunta" legend="Datos del Tipo de Pregunta" styleClass="fieldsetDatos">
+
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Codigo:"/>
+                        <p:inputText id="inputCodigoTipoPregunta" value="#{controllerTipoPregunta.tipoPregunta.codigo}" maxlength="2"/>
+                        <p:outputLabel value="Abierta:"/>
+                        <p:selectBooleanCheckbox id="chechAbierto"  value="#{controllerTipoPregunta.isAbierta}">
+                            <p:ajax  update="fieldsetAlternativas" listener="#{controllerTipoPregunta.desactivar()}" oncomplete="display_black('frmFactores:fieldsetAlternativas')"/>
+                        </p:selectBooleanCheckbox>
+
+                        <p:outputLabel value="Descripcion:"/>
+                        <p:inputTextarea id="inputDescripcionTipoPregunta" value="#{controllerTipoPregunta.tipoPregunta.descripcion}"/>          
+                    </h:panelGrid>
+
+                </p:fieldset>
+                <br/>
+                <p:fieldset widgetVar="fieldsetAlternativas" id="fieldsetAlternativas" styleClass="fieldsetDatos" legend="Alternativas">
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel for="descripcionAlternativa" value="Descripcion"/>
+                            </td>
+                            <td>
+                                <p:outputLabel for="alternativa" value="Alternativa"/>
+                            </td>
+                            <td>
+                                <p:outputLabel for="valorAlternativa" value="Valor"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:inputText id="descripcionAlternativa" label="Descripcion" value="#{controllerTipoPregunta.alternativaRespuesta.descripcion}"  disabled="#{controllerTipoPregunta.disable}" style="width: 300px">  
+                                </p:inputText>
+                            </td>
+                            <td>
+                                <p:inputText id="alternativa" label="Alternativa" value="#{controllerTipoPregunta.alternativaRespuesta.alternativa}"  disabled="#{controllerTipoPregunta.disable}" style="width: 55px">
+                                </p:inputText>
+                            </td>
+                            <td>
+                                <p:spinner  min="0"  size="5" id="valorAlternativa" label="Valor" value="#{controllerTipoPregunta.alternativaRespuesta.valor}"  disabled="#{controllerTipoPregunta.disable}"/>
+
+                            </td>
+                            <td>
+                                <p:commandButton value="Agregar" disabled="#{controllerTipoPregunta.disable}" actionListener="#{controllerTipoPregunta.agregarAlternativaRespuesta()}" update="tableAlternativasRespuesta, growl"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+
+                    <p:dataTable id="tableAlternativasRespuesta" value="#{controllerTipoPregunta.listaAlternativasRespuesta}" var="alternativasRespuesta">
+                        <p:column headerText="Descripcion" >
+                            <p:outputLabel value="#{alternativasRespuesta.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Alternativa">
+                            <p:outputLabel value="#{alternativasRespuesta.alternativa}"/>
+                        </p:column>
+                        <p:column headerText="Valor">
+                            <p:outputLabel value="#{alternativasRespuesta.valor}"/>
+                        </p:column>
+                        <p:column headerText="Opcion">
+                            <p:commandButton value="Eliminar" actionListener="#{controllerTipoPregunta.eliminarAlternativaRespuesta(alternativasRespuesta)}" update="tableAlternativasRespuesta">
+                                <p:confirm header="Confirmacion" message="Desea Eliminar Alternativa Seleccionada ?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <br/>
+
+                    <h:panelGrid columns="2" style="margin: 0 auto 0 auto">
+                        <p:commandButton value="Grabar" actionListener="#{controllerTipoPregunta.registrarTipoPregunta()}" oncomplete="limpiar('tipoPregunta')" update="tableTipoPreguntas, growl"/>
+                        <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldsetTipoPregunta', 'tipoPregunta'), display_none('frmFactores:fieldsetAlternativas', 'alternativa')"/>
+                    </h:panelGrid>
+
+                </p:fieldset>
+                <br/>
+                <br/>
+
+                <p:dataTable id="tableTipoPreguntas" value="#{controllerTipoPregunta.listaTipoPregunta}" var="TipoPregunta" styleClass="tableDatos">
+                    <p:column headerText="Codigo" style="width: 15%">
+                        <p:outputLabel value="#{TipoPregunta.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion">
+                        <p:outputLabel value="#{TipoPregunta.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Tipo de Pregunta" style="width: 15%">
+                        <p:outputLabel value="#{TipoPregunta.abierta}" />
+                    </p:column>
+                    <p:column headerText="Opciones" style="width: 20%">
+                        <p:commandButton icon="editButton" actionListener="#{controllerTipoPregunta.abrirDialogEditarTipoPregunta(TipoPregunta.id)}" />
+                        <p:commandButton icon="deleteButton" actionListener="#{controllerTipoPregunta.desactivarTipoPregunta(TipoPregunta)}" update="tableTipoPreguntas">
+                            <p:confirm header="Confirmacion" message="Desea Desactivar Tipo de Pregunta Seleccionada ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+
+                <p:dialog modal="true" header="Editar Tipo de Pregunta" id="dialogTipoPreguntaEdit" widgetVar="dialogTipoPreguntaEdit" width="600">
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel value="Codigo:"/>
+                        <p:inputText id="inputCodigoTipoPreguntaEdit" value="#{controllerTipoPregunta.tipoPreguntaEdit.codigo}"/>
+                        <p:outputLabel value="Abierto: "/>
+                        <p:selectBooleanCheckbox id="chechAbiertoEdit"  value="#{controllerTipoPregunta.isAbiertaEdit}">
+                            <p:ajax  update="fieldsetAlternativaEdit" listener="#{controllerTipoPregunta.desactivarEdit()}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:outputLabel value="Descripcion:"/>
+                        <p:inputTextarea id="inputDescripcionTipoPreguntaEdit" value="#{controllerTipoPregunta.tipoPreguntaEdit.descripcion}"/>
+                    </h:panelGrid>
+                    <br/>
+                    <br/>
+
+                    <h3>Alternativas</h3>
+                    <br/>
+                    <p:fieldset id="fieldsetAlternativaEdit" widgetVar="fieldsetAlternativaEdit">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:outputLabel for="descripcionAlternativaEdit" value="Descripcion"/>
+                                </td>
+                                <td>
+                                    <p:outputLabel for="alternativaEdit" value="Alternativa"/>
+                                </td>
+                                <td>
+                                    <p:outputLabel for="valorAlternativaEdit" value="Valor"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p:inputText id="descripcionAlternativaEdit" label="Descripcion" value="#{controllerTipoPregunta.alternativaRespuestaEdit.descripcion}"  disabled="#{controllerTipoPregunta.disable}" style="width: 300px">  
+                                    </p:inputText>
+                                </td>
+                                <td>
+                                    <p:inputText id="alternativaEdit" label="Alternativa" value="#{controllerTipoPregunta.alternativaRespuestaEdit.alternativa}"  disabled="#{controllerTipoPregunta.disable}" style="width: 55px">
+                                    </p:inputText>
+                                </td>
+                                <td>
+                                    <p:spinner  min="0"  size="5" id="valorAlternativaEdit" label="Valor" value="#{controllerTipoPregunta.alternativaRespuestaEdit.valor}"  disabled="#{controllerTipoPregunta.disable}"/>
+
+                                </td>
+                                <td>
+                                    <p:commandButton value="Agregar" disabled="#{controllerTipoPregunta.disable}" actionListener="#{controllerTipoPregunta.agregarAlternativaRespuesta()}" update="tableAlternativasRespuesta, growl"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                    <br/>
+                    <p:dataTable  id="tableAlternativasView" value="#{controllerTipoPregunta.listaAlternativasRespuesta}" var="alternativasView">
+                        <p:column  headerText="Descripcion"> 
+                            <p:outputLabel value="#{alternativasView.descripcion}"/>
+                        </p:column>
+                        <p:column  headerText="Alternativa" style="width: 15%"> 
+                            <p:outputLabel value="#{alternativasView.alternativa}"/>
+                        </p:column>
+                        <p:column headerText="Valor" style="width: 10%">
+                            <p:outputLabel value="#{alternativasView.valor}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Editar" actionListener="#{controllerTipoPregunta.editarTipoPregunta()}" update="tableTipoPreguntas" oncomplete="PF('dialogTipoPreguntaEdit').hide()"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialogTipoPreguntaEdit').hide()"/>
+                    </h:panelGrid>
+                </p:dialog>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>

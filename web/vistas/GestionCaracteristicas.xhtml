@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+
+    </h:head>
+
+    <h:body>    
+        <h:form id="frmFactores">
+            <p:fieldset id="fieldsetCaracteristicas" legend="Caracteristicas">
+                 <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false"/> 
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo"  onclick="display_black('frmFactores:fieldCaracteristica')"/>
+                </h:panelGrid>
+
+                <p:fieldset id="fieldCaracteristica" legend="Registro de Caracteristicas" styleClass="fieldsetDatos">
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel for="inputCodigoCarac" value="Codigo"/>
+                        <p:inputText id="inputCodigoCarac" label="Codigo" value="#{controllerCaracteristica.caracteristica.codigo}" size="40">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcionCarac" value="Descripcion"/>
+                        <p:inputText id="inputDescripcionCarac" label="Descripcion" value="#{controllerCaracteristica.caracteristica.descripcion}" styleClass="inputDescripcion">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Estado"/>
+                        <p:selectOneMenu id="selectEstadoCarac" value="#{controllerCaracteristica.estado.idEstado}" style="width: 150px;">
+                            <f:selectItems value="#{controllerCaracteristica.listaEstados}" var="estados" 
+                                           itemLabel="#{estados.nombre}" itemValue="#{estados.idEstado}"/>
+                        </p:selectOneMenu>
+
+
+                        <p:commandButton value="Guardar" actionListener="#{controllerCaracteristica.registrarCaracteristica()}" process="@this, fieldCaracteristica" oncomplete="limpiar('caracteristica')" update="tableCaracteristicas, growl" />
+                        <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldCaracteristica', 'caracteristica')"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <br/>
+                <p:dataTable id="tableCaracteristicas" value="#{controllerCaracteristica.listaCaracteristica}"  var="caracteristica" styleClass="tableDatos"
+                             emptyMessage="No exiten Caracteristicas">
+                    <p:column headerText="Codigo" filterBy="#{caracteristica.codigo}" style="width: 20%;">
+                        <h:outputText value="#{caracteristica.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion" filterBy="#{caracteristica.descripcion}">
+                        <h:outputText value="#{caracteristica.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Opciones" style="width: 15%;">
+                        <p:commandButton icon="editButton" actionListener="#{controllerCaracteristica.abrirDialogo(caracteristica)}" process="@this"/>
+                        <p:commandButton icon="deleteButton" actionListener="#{controllerCaracteristica.desactivarCaracteristica(caracteristica)}"
+                                         styleClass="buttonDelete" process="@this, tableCaracteristicas" update="tableCaracteristicas">
+                            <p:confirm header="Confirmacion" message="Desea Desactivar Caracteristica Seleccionada ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog id="dialogoEditarCaracteristica" modal="true" header="Editar Factor" widgetVar="dialogoEditarCaracteristica">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="inputCodigoEdit" value="Codigo"/>
+                        <p:inputText id="inputCodigoEdit" label="Codigo" value="#{controllerCaracteristica.caracteristicaEdit.codigo}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcionEdit" value="Descripcion"/>
+                        <p:inputText id="inputDescripcionEdit" label="Descripcion" value="#{controllerCaracteristica.caracteristicaEdit.descripcion}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:commandButton value="Guardar" actionListener="#{controllerCaracteristica.editarCaracteristica()}" process="@this,dialogoEditarCaracteristica" update="growl" />
+                        <p:commandButton value="Cancelar" onclick="PF('dialogoEditarCaracteristica').hide();" actionListener="#{controllerCaracteristica.cancelar()}" process="@this"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </p:fieldset>
+            </h:form>
+    </h:body>
+</html>

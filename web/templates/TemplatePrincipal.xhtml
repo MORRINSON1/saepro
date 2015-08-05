@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript name="./js/gestionFactores.js"/>
+        <h:outputScript name="./js/jquery.js"/>
+         <script src="../resources/js/jquery.js" type="text/javascript"></script>
+        
+        <title>Facelets Template</title>
+    </h:head>
+    
+    <script>
+        function cargarPage (url){
+            
+               $.ajax({
+                  type: 'POST',
+                   url: url,
+                   data:{},
+                   success: function (datos) {
+                            $('#content').html(datos);
+                        }
+               }); 
+        }
+    </script>
+
+    <h:body>
+       
+        <div id="top">
+            <h:form>
+                <p:menubar>
+                    <p:submenu label="Archivo" icon="ui-icon-document">
+                        
+                        <p:menuitem value="Factores" onclick="cargarPage('../vistas/GestionFactores.xhtml #frmFactores')"/>
+                        <p:menuitem value="Caracteristicas" onclick="cargarPage('../vistas/GestionCaracteristicas.xhtml #frmFactores')"/>
+                        <p:menuitem value="Indicadores" onclick="cargarPage('../vistas/GestionIndicadores.xhtml #frmFactores')" />
+                        <p:separator/>
+                        <p:menuitem value="Preguntas" onclick="cargarPage('../vistas/GestionPreguntas.xhtml #frmFactores')" />
+                        <p:menuitem value="Tipos de Preguntas" onclick="cargarPage('../vistas/GestionTipoPreguntas.xhtml #frmFactores')"/>
+                        
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+        </div>
+
+        <div id="content" class="center_content">
+        </div>
+     
+        <div id="bottom">
+        </div>
+        
+    </h:body>
+</html>

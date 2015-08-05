@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+    </h:head>
+
+    <h:body>
+        <h:form id="frmFactores">
+            <p:fieldset id="fieldsetFactores" legend="Factores">
+                <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false"/> 
+
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo" onclick="display_black('frmFactores:fieldFactor')"/>
+                </h:panelGrid>
+
+                <p:fieldset id="fieldFactor" legend="Registo de Factores" styleClass="fieldsetDatos">
+
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel for="inputCodigo" value="Codigo"/>
+                        <p:inputText id="inputCodigo" label="Codigo" value="#{controllerFactor.factor.codigo}" size="40">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcion" value="Descripcion"/>
+                        <p:inputText id="inputDescripcion" value="#{controllerFactor.factor.descripcion}" styleClass="inputDescripcion">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Estado"/>
+                        <p:selectOneMenu id="selectEstado" value="#{controllerFactor.estado.idEstado}" style="width: 150px;">
+                            <f:selectItems value="#{controllerFactor.listaEstados}" var="estados" 
+                                           itemLabel="#{estados.nombre}" itemValue="#{estados.idEstado}"/>
+                        </p:selectOneMenu>
+
+
+                        <p:commandButton value="Guardar"  actionListener="#{controllerFactor.registrarFactor()}" process="@this, fieldFactor" oncomplete="limpiar('factores')" update="tableFactores, growl"/>
+                        <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldFactor', 'factores')"/>
+
+                    </h:panelGrid>   
+                </p:fieldset>
+                <br/>
+                <br/>
+                <p:dataTable id="tableFactores" value="#{controllerFactor.listaFactor}" var="factor"   styleClass="tableDatos"
+                             emptyMessage="No existen Factores" >
+                    <p:column headerText="Codigo" filterBy="#{factor.codigo}" filterMatchMode="contains" style="width: 20%;">
+                        <h:outputText value="#{factor.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Descripcion" filterBy="#{factor.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{factor.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Opciones" style="width: 15%;">
+                        <p:commandButton icon="editButton" actionListener="#{controllerFactor.abrirDialog(factor.idFactor)}" process="@this"/>
+                        <p:commandButton icon="deleteButton" actionListener="#{controllerFactor.desactivarFactor(factor)}" process="@this, tableFactores"
+                                         styleClass="buttonDelete" update="tableFactores">
+                            <p:confirm header="Confirmacion" message="Desea Desactivar Factor Seleccionado ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>   
+
+                <p:dialog id="dialogoEditar" header="Editar Factor" modal="true" widgetVar="dialogoEditar">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="inputCodigoEdit" value="Codigo"/>
+                        <p:inputText id="inputCodigoEdit"  label="Codigo"  value="#{controllerFactor.factorEdit.codigo}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcionEdit" value="Descripcion"/>
+                        <p:inputText id="inputDescripcionEdit" label="Descripcion" value="#{controllerFactor.factorEdit.descripcion}">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:commandButton value="Guardar" actionListener="#{controllerFactor.editarFactor()}" update="growl"  process="@this,dialogoEditar"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialogoEditar').hide();" actionListener="#{controllerFactor.cancelar()}" process="@this"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </p:fieldset> 
+        </h:form>
+
+    </h:body>
+</html>

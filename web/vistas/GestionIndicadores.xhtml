@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+
+    </h:head>
+
+    <h:body>
+                
+        <h:form id="frmFactores">
+                <p:fieldset id="fieldIndicadores" legend="Indicadores">
+                    <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false" /> 
+
+                    <h:panelGrid columns="1">
+                        <p:commandLink value="Nuevo"  onclick="display_black('frmFactores:fieldsetIndicador')"/>
+                    </h:panelGrid>
+
+                    <p:fieldset id="fieldsetIndicador" legend="Registro de Indicador" styleClass="fieldsetDatos">
+
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="inputCodigoIndicador" value="Codigo"/>
+                            <p:inputText id="inputCodigoIndicador" label="Codigo" value="#{controllerIndicador.indicador.codigo}">
+                                <f:validator validatorId="validarCamposObligatorios"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Area Responsable"/>
+                            <p:selectOneMenu value="#{controllerIndicador.fuente.codigo}" filter="true" filterMatchMode="contains" style="width: 450px;">
+                                <f:selectItems value="#{controllerIndicador.listaFuentes}" var="fuentes"
+                                               itemLabel="#{fuentes.descripcion}" itemValue="#{fuentes.codigo}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="inputDescripcionIndicador" value="Descripcion"/>
+                            <p:inputTextarea id="inputDescripcionIndicador" label="Descripcion" value="#{controllerIndicador.indicador.descripcion}" styleClass="inputDescripcion"/>
+
+
+                            <p:commandButton value="Guardar" actionListener="#{controllerIndicador.registrarIndicador()}" update="tableIndicadores, growl"/>
+                            <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldsetIndicador', 'indicador')"/>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <br/>
+                    <br/>
+
+                    <p:dataTable id="tableIndicadores" value="#{controllerIndicador.listaIndicadores}" var="indicadores" paginator="true" rows="15" style="width: 1000px;" styleClass="tableDatos">
+                        <p:column headerText="Codigo" style="width: 15%" filterBy="#{indicadores.codigo}" filterMatchMode="contains">
+                            <p:outputLabel value="#{indicadores.codigo}"/>
+                        </p:column>
+                        <p:column headerText="Descripcion" filterBy="#{indicadores.descripcion}" filterMatchMode="contains">
+                            <p:outputLabel value="#{indicadores.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Area Responsable" style="width: 15%" filterBy="#{indicadores.idResponsable.descripcion}" filterMatchMode="contains">
+                            <p:outputLabel value="#{indicadores.idResponsable.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Opciones" style="width: 15%">
+                            <p:commandButton icon="editButton"  actionListener="#{controllerIndicador.abrirDialog(indicadores)}" process="@this"/>
+                            <p:commandButton icon="deleteButton" actionListener="#{controllerIndicador.desactivarIndicador(indicadores)}" process="@this, tableIndicadores" 
+                                             styleClass="buttonDelete"  update="tableIndicadores">
+                                <p:confirm header="Confirmacion" message="Desea Desactivar Indicador Seleccionada ?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dialog id="dialogoEditarIndicador" modal="true"  header="Editar Indicador" widgetVar="dialogoEditarIndicador">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="inputCodigoIndicadorEdit" value="Codigo"/>
+                            <p:inputText id="inputCodigoIndicadorEdit" label="Codigo" value="#{controllerIndicador.indicadorEdit.codigo}"/>
+
+                            <p:outputLabel value="Area Responsable"/>
+                            <p:inputText  value="#{controllerIndicador.indicadorEdit.idResponsable.descripcion}" disabled="true"/>
+
+                            <p:outputLabel value="Nueva Area"/>
+                            <p:selectOneMenu id="selectFuentes" value="#{controllerIndicador.fuente.id}" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="[Seleccione...]" noSelectionOption="true"/>
+                                <f:selectItems value="#{controllerIndicador.listaFuentes}" var="fuentes"
+                                               itemLabel="#{fuentes.descripcion}" itemValue="#{fuentes.id}"
+                                               />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="inputDescripcionIndicadorEdit" value="Descripcion"/>
+                            <p:inputTextarea id="inputDescripcionIndicadorEdit" label="Descripcion" value="#{controllerIndicador.indicadorEdit.descripcion}" styleClass="inputDescripcion"/>
+
+
+                            <p:commandButton value="Guardar" actionListener="#{controllerIndicador.editarIndicador()}" update="growl, dialogoEditarIndicador, selectFuentes" process="@this, dialogoEditarIndicador"/>
+                            <p:commandButton value="Cancelar" actionListener="#{controllerIndicador.cancelar()}" process="@this" />
+                        </h:panelGrid>
+                    </p:dialog>
+
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                </p:fieldset>
+
+          </h:form>
+
+    </h:body>
+</html>

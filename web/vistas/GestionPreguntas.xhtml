@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+    </h:head>
+
+
+    <h:body>
+
+        <h:form id="frmFactores">
+            <p:fieldset id="fieldsetPregunta" legend="Preguntas">
+                <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false"/> 
+
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo" onclick="display_black('frmFactores:fieldsetDatosPreguntas')"/>
+                </h:panelGrid>
+
+                <p:fieldset id="fieldsetDatosPreguntas" legend="Registo de Preguntas" styleClass="fieldsetDatos">
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel for="inputCodigoPregunta" value="Codigo"/>
+                        <p:inputText id="inputCodigoPregunta" label="Codigo" value="#{controllerPregunta.pregunta.codigo}" size="40">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Tipo Pregunta"/>
+                        <p:selectOneMenu id="selectTipoPregunta" value="#{controllerPregunta.tipoPregunta.id}" style="width: 150px;">
+                            <f:selectItems  value="#{controllerPregunta.listaTipoPregunta}"  var="TipoPregunta" 
+                                            itemLabel="[#{TipoPregunta.codigo}] #{TipoPregunta.descripcion}"  itemValue="#{TipoPregunta.id}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="inputDescripcionPregunta" value="Enunciado"/>
+                        <p:inputTextarea id="inputDescripcionPregunta" value="#{controllerPregunta.pregunta.enunciado}" styleClass="inputDescripcion"/>
+
+                        <p:outputLabel value="Estado"/>
+                        <p:selectOneMenu id="selectEstadoPregunta" value="#{controllerPregunta.estado.idEstado}" style="width: 150px;">
+                            <f:selectItems value="#{controllerPregunta.listaEstado}"  var="estados" 
+                                           itemLabel="#{estados.nombre}"  itemValue="#{estados.idEstado}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Guardar"  actionListener="#{controllerPregunta.registrarPregunta()}" process="@this, fieldsetDatosPreguntas" oncomplete="limpiar('pregunta')" update="tablePreguntas, growl"/>
+                        <p:commandButton value="Cancelar" onclick="display_none('frmFactores:fieldsetDatosPreguntas', 'pregunta')"/>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <br/>
+                <p:dataTable id="tablePreguntas" value="#{controllerPregunta.listaPreguntas}" var="preguntas" styleClass="tableDatos" 
+                             emptyMessage="No existen Preguntas">
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{preguntas.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Enunciado">
+                        <p:outputLabel value="#{preguntas.enunciado}"/>
+                    </p:column>
+                    <p:column headerText="Tipo de Pregunta">
+                        <p:outputLabel value="#{preguntas.tipoPregunta.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandButton  icon="editButton" actionListener="#{controllerPregunta.abrirDialog(preguntas.idPregunta)}" process="@this"/>
+                        <p:commandButton icon="deleteButton" actionListener="#{controllerPregunta.desactivarPregunta(preguntas.idPregunta)}" process="@this, tablePreguntas"
+                                         styleClass="buttonDelete" update="tablePreguntas">
+                            <p:confirm header="Confirmacion" message="Desea Desactivar Pregunta Seleccionado ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog id="dialogoPreguntaEdit" modal="true" header="Editar Pregunta" widgetVar="dialogoPreguntaEdit" >
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="inputCodigoPreguntaEdit" value="Codigo"/>
+                        <p:inputText id="inputCodigoPreguntaEdit" label="Codigo" value="#{controllerPregunta.preguntaEdit.codigo}" size="40">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+                        
+                        <p:outputLabel value="Tipo de Pregunta"/>
+                        <p:inputText value="#{controllerPregunta.preguntaEdit.tipoPregunta.descripcion}" disabled="true"/>
+                        
+                        <p:outputLabel value="Nuevo Tipo de Pregunta"/>
+                        <p:selectOneMenu id="selectTipoPreguntaEdit" value="#{controllerPregunta.tipoPregunta.id}" style="width: 150px;">
+                            <f:selectItem itemLabel="[Seleccione...]"/>
+                            <f:selectItems  value="#{controllerPregunta.listaTipoPregunta}"  var="TipoPregunta" 
+                                            itemLabel="[#{TipoPregunta.codigo}] #{TipoPregunta.descripcion}"  itemValue="#{TipoPregunta.id}"></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="inputDescripcionPreguntaEdit" value="Enunciado"/>
+                        <p:inputTextarea id="inputDescripcionPreguntaEdit" value="#{controllerPregunta.preguntaEdit.enunciado}" styleClass="inputDescripcion"/>
+                        
+                        <p:commandButton value="Guardar" actionListener="#{controllerPregunta.editarPregunta()}" update="growl"  process="@this,dialogoPreguntaEdit"/>
+                        <p:commandButton value="Cancelar" actionListener="#{controllerPregunta.cancelar()}" process="@this,dialogoPreguntaEdit" />
+                    </h:panelGrid>
+                </p:dialog>
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                
+                
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>
