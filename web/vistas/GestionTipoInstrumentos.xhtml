@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+    </h:head>
+
+    <h:body>
+        <h:form id="frmInstrumentos">
+            <p:fieldset id="fieldsetInstrumentos" legend="Instrumentos">
+                <p:growl id="growl" showDetail="true" sticky="false" autoUpdate="false"/> 
+
+                <h:panelGrid columns="1">
+                    <p:commandLink value="Nuevo" onclick="display_black('frmInstrumentos:fieldInstrumentos')"/>
+                </h:panelGrid>
+
+                <p:fieldset id="fieldInstrumentos" legend="Registo de Instrumentos" styleClass="fieldsetDatos">
+
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel for="inputCodigo" value="Codigo"/>
+                        <p:inputText id="inputCodigo" label="Codigo" value="#{controllerTipoInstrumento.tipoInstrumento.codigo}"  size="40">
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcion" value="Descripcion" />
+                        <p:inputTextarea id="inputDescripcion" value="#{controllerTipoInstrumento.tipoInstrumento.descripcion}"  styleClass="inputDescripcion">
+                        </p:inputTextarea>
+
+                        <p:outputLabel value="Posee Preguntas?"></p:outputLabel>
+                        <p:selectBooleanCheckbox value="#{controllerTipoInstrumento.tipoInstrumento.isPregunta}" ></p:selectBooleanCheckbox>
+                                
+                        <p:outputLabel value="Estado"/>
+                        <p:selectOneMenu id="selectEstado" value="#{controllerTipoInstrumento.estado.idEstado}" style="width: 150px;">
+                            <f:selectItems value="#{controllerTipoInstrumento.listaEstados}"  var="estados" 
+                                           itemLabel="#{estados.nombre}" itemValue="#{estados.idEstado}">
+                            </f:selectItems>
+                        </p:selectOneMenu>
+
+
+                        <p:commandButton value="Guardar"  process="@this, fieldInstrumentos" 
+                            oncomplete="limpiar('instrumentos')" 
+                            update="tableInstrumentos, growl"  actionListener="#{controllerTipoInstrumento.guardarTipoInstrumento()}"/>
+                        <p:commandButton value="Cancelar" onclick="display_none('frmInstrumentos:fieldInstrumentos', 'instrumentos')"/>
+
+                    </h:panelGrid>   
+                </p:fieldset>
+                <br/>
+                <br/>
+                <p:dataTable id="tableInstrumentos" var="instrumentos"   styleClass="tableDatos"
+                emptyMessage="No existen Instrumentos" editable="true" style="width: 1000px;" 
+                paginator="true" rows="15" paginatorTemplate="{CurrentPageReport}  
+                {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} 
+                {RowsPerPageDropdown}" rowsPerPageTemplate="10,20" scrollable="true" scrollHeight="260" 
+                scrollWidth="1000" value="#{controllerTipoInstrumento.listaTipoInstrumento}">
+                    
+                    <p:column headerText="Codigo" filterMatchMode="contains" style="width: 20%;" >
+                        <h:outputText value="#{instrumentos.codigo}" />
+                    </p:column>
+                    <p:column headerText="Descripcion"  filterMatchMode="contains">
+                        <h:outputText  value="#{instrumentos.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Preguntas"  filterMatchMode="contains" style="width: 20%;">
+                        <h:outputText  value="#{instrumentos.isPregunta ? 'SI':'NO'}" />
+                    </p:column>
+                    
+                    <p:column headerText="Opciones" filterMatchMode="contains">
+                        <p:commandButton icon="editButton" actionListener="#{controllerTipoInstrumento.abrirDialog(instrumentos.id)}" process="@this"/>
+                        <p:commandButton icon="deleteButton" actionListener="#{controllerTipoInstrumento.cambiarEstadoTipoInstrumento(instrumentos.id)}"  process="@this, tableInstrumentos"
+                        styleClass="buttonDelete" update="tableInstrumentos">
+                            <p:confirm header="Confirmacion" message="Desea Desactivar Tipo Instrumento Seleccionado ?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>   
+
+                <p:dialog id="dialogoEditar" header="Editar Instrumentos" modal="true" widgetVar="dialogoEditar">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="inputCodigoEdit" value="Codigo"/>
+                        <p:inputText id="inputCodigoEdit"  value="#{controllerTipoInstrumento.tipoInstrumentoEdit.codigo}" label="Codigo"  >
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="inputDescripcionEdit" value="Descripcion"/>
+                        <p:inputText id="inputDescripcionEdit" value="#{controllerTipoInstrumento.tipoInstrumentoEdit.descripcion}" label="Descripcion" >
+                            <f:validator validatorId="validarCamposObligatorios"/>
+                        </p:inputText>
+                        
+                        <p:outputLabel value="Posee Preguntas?"></p:outputLabel>
+                        <p:selectBooleanCheckbox value="#{controllerTipoInstrumento.tipoInstrumentoEdit.isPregunta}" ></p:selectBooleanCheckbox>
+
+                        <p:commandButton value="Guardar" actionListener="#{controllerTipoInstrumento.editarTipoInstrumento()}" oncomplete="PF('dialogoEditar').hide();" update="growl"  process="@this,dialogoEditar"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dialogoEditar').hide();" process="@this"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </p:fieldset> 
+        </h:form>
+
+    </h:body>
+</html>
