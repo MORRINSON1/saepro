@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -35,15 +37,20 @@ public class Fuente implements Serializable {
     
     @Column(name = "responsable")
     private String responsable;
-
-    public Fuente() {
+    
+    @JoinColumn
+    @ManyToOne
+    private Estado estado;
+    
+    public Fuente(){
     }
 
-    public Fuente(Integer id, String codigo, String descripcion, String responsable) {
+    public Fuente(Integer id, String codigo, String descripcion, String responsable, Estado estado) {
         this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.responsable = responsable;
+        this.estado = estado;
     }
 
     /**
@@ -102,9 +109,22 @@ public class Fuente implements Serializable {
         this.responsable = responsable;
     }
 
-    @Override
+    /**
+     * @return the estado
+     */
+    public Estado getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+    
+     @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

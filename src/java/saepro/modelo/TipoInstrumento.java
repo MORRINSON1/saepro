@@ -42,7 +42,7 @@ public class TipoInstrumento implements Serializable {
     @JoinColumn (name = "id_estado")
     private Estado id_estado;
 
-    public TipoInstrumento() {
+    public TipoInstrumento(){
     }
 
     public TipoInstrumento(Integer id, String codigo, String descripcion, boolean isPregunta, Estado estado) {

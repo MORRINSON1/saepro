@@ -9,8 +9,10 @@ package saepro.implementacion;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import saepro.ejb.EstadoFacadeLocal;
 import saepro.ejb.TipoInstrumentoFacadeLocal;
@@ -51,7 +53,8 @@ public class ControllerTipoInstrumento {
         try {
             listaEstados = ejbEstado.findAll();
         }catch(Exception ex){
-            System.out.println("Error cargarEstados "+ex.getMessage());  
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
         }
     }
     
@@ -59,18 +62,22 @@ public class ControllerTipoInstrumento {
         try {
             listaTipoInstrumento = ejbTipoInstrumento.findAll();
         }catch(Exception ex){
-            System.out.println("Error cargarTipoInstrumento "+ex.getMessage());  
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
         }
     }
     
     public void guardarTipoInstrumento(){
         try {
+            if(!tipoInstrumento.getDescripcion().trim().equals("")){
             estado = new Estado(1);
             tipoInstrumento.setEstado(estado);
             ejbTipoInstrumento.create(tipoInstrumento);
+            }
             cargarTipoInstrumento();
         }catch(Exception ex){
-            System.out.println("Error guardarTipoInstrumento "+ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
         }
     }
     
@@ -82,7 +89,8 @@ public class ControllerTipoInstrumento {
                 ejbTipoInstrumento.edit(tipoInstrumento);
             }
         }catch(Exception ex){
-            System.out.println("Error cambiarEstadoTipoInstrumento "+ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
         }
     }
     
@@ -95,7 +103,8 @@ public class ControllerTipoInstrumento {
                 RequestContext.getCurrentInstance().execute("PF('dialogoEditar').show()");
             }
         }catch(Exception ex){
-            System.out.println("Error abrirDialog "+ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
         }
     }
     
@@ -105,7 +114,8 @@ public class ControllerTipoInstrumento {
             cargarTipoInstrumento();
             RequestContext.getCurrentInstance().update("frmInstrumentos");
         }catch(Exception ex){
-            System.out.println("Error editarTipoInstrumento "+ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
         }
     }
 
