@@ -36,7 +36,7 @@ public class Fuente implements Serializable {
     private String descripcion;
     
     @Column(name = "responsable")
-    private String responsable;
+    private boolean isresponsable;
     
     @JoinColumn
     @ManyToOne
@@ -45,11 +45,11 @@ public class Fuente implements Serializable {
     public Fuente(){
     }
 
-    public Fuente(Integer id, String codigo, String descripcion, String responsable, Estado estado) {
+    public Fuente(Integer id, String codigo, String descripcion, boolean isresponsable, Estado estado) {
         this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.responsable = responsable;
+        this.isresponsable = isresponsable;
         this.estado = estado;
     }
 
@@ -95,18 +95,12 @@ public class Fuente implements Serializable {
         this.descripcion = descripcion;
     }
 
-    /**
-     * @return the responsable
-     */
-    public String getResponsable() {
-        return responsable;
+    public boolean isIsresponsable() {
+        return isresponsable;
     }
 
-    /**
-     * @param responsable the responsable to set
-     */
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
+    public void setIsresponsable(boolean isresponsable) {
+        this.isresponsable = isresponsable;
     }
 
     /**

@@ -117,7 +117,7 @@ public class ControllerFuentes implements Serializable{
         }
     }
     
-    public void editarTipoInstrumento(){
+    public void editarFuentes(){
         try {
             ejbFuenteFacadeLocal.edit(editarFuente);
             listarFuentes();

@@ -79,7 +79,6 @@ public class TipoInstrumento implements Serializable {
         this.descripcion = descripcion;
     }
 
-
     public Estado getEstado() {
         return id_estado;
     }
