@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    <h1>Formulario de Registro de Usuario</h1>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form>
+                        <p:growl autoUpdate="true" id="msg"></p:growl>
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Identificación" for="txtId"></h:outputLabel>
+                            <p:inputText id="txtId" label="Identificación" required="true" 
+                            validator="validarCamposObligatorios" size="30" 
+                            value="#{controllerUsuario.usuario.identificacion}"></p:inputText>
+                            <h:messages for="txtId" style="color: red"></h:messages>
+                            
+                            <h:outputLabel value="Nombres" for="txtNombres"></h:outputLabel>
+                            <p:inputText id="txtNombres" label="Nombres" required="true" 
+                            size="30" validator="validarCamposObligatorios" 
+                            value="#{controllerUsuario.usuario.nombres}"></p:inputText>
+                            <h:messages for="txtNombres" style="color: red"></h:messages>
+                            
+                            <h:outputLabel value="Apellidos" for="txtApellidos"></h:outputLabel>
+                            <p:inputText id="txtApellidos" label="Apellidos" required="true" 
+                            size="30" validator="validarCamposObligatorios" 
+                            value="#{controllerUsuario.usuario.apellidos}"></p:inputText>
+                            <h:messages for="txtApellidos" style="color: red"></h:messages>
+                            
+                            <h:outputLabel value="Correo Electronico" for="txtEmail"></h:outputLabel>
+                            <p:inputText id="txtEmail" label="Correo Electrónico" size="30"
+                            required="true" validator="validarCamposObligatorios" 
+                            value="#{controllerUsuario.usuario.email}">
+                            <f:validator for="txtEmail" validatorId="validarEmail"></f:validator>
+                            </p:inputText>
+                            <h:messages for="txtEmail" style="color: red"></h:messages>
+                            
+                            <h:outputLabel value="Contraseña" for="txtPassword"></h:outputLabel>
+                            <p:password id="txtPassword" label="Contraseña" required="true" 
+                            validator="validarCamposObligatorios" size="30" 
+                            value="#{controllerUsuario.usuario.contrasena}"></p:password>
+                            <h:messages for="txtPassword" style="color: red"></h:messages>
+                            
+                            <h:outputLabel value="Repita Contraseña" for="txtValidaPassword"></h:outputLabel>
+                            <p:password id="txtValidaPassword" label="Repita Contraseña" required="true" 
+                            size="30" validator="validarCamposObligatorios" value="#{controllerUsuario.validaPassword}"
+                            ></p:password>
+                            <h:messages for="txtValidaPassword" style="color: red"></h:messages>
+                        </h:panelGrid>
+                        <br/>
+                        <h:commandLink value="Registrar" style="color: blue"
+                        actionListener="#{controllerUsuario.insertarUsuario()}"></h:commandLink>
+                    </h:form>
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+

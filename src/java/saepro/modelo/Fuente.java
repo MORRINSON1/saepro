@@ -38,19 +38,19 @@ public class Fuente implements Serializable {
     @Column(name = "responsable")
     private boolean isresponsable;
     
-    @JoinColumn
     @ManyToOne
-    private Estado estado;
+    @JoinColumn(name = "id_estado")
+    private Estado id_estado;
     
     public Fuente(){
     }
 
-    public Fuente(Integer id, String codigo, String descripcion, boolean isresponsable, Estado estado) {
+    public Fuente(Integer id, String codigo, String descripcion, boolean isresponsable, Estado id_estado) {
         this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.isresponsable = isresponsable;
-        this.estado = estado;
+        this.id_estado = id_estado;
     }
 
     /**
@@ -104,20 +104,20 @@ public class Fuente implements Serializable {
     }
 
     /**
-     * @return the estado
+     * @return the id_estado
      */
-    public Estado getEstado() {
-        return estado;
+    public Estado getId_estado() {
+        return id_estado;
     }
 
     /**
-     * @param estado the estado to set
+     * @param id_estado the id_estado to set
      */
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setId_estado(Estado id_estado) {
+        this.id_estado = id_estado;
     }
-    
-     @Override
+
+    @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }

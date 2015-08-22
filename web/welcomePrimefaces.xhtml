@@ -18,28 +18,30 @@
             <p:layout fullPage="true">
 
                 <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    Header
-                </p:layoutUnit>
-
-                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                    Footer
-                </p:layoutUnit>
-
-                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
-                    <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Demo" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
-
-                        </p:submenu>
-
-                    </p:menu>
+                    <h1>Inicio de Sesión</h1>
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    Welcome to PrimeFaces
+                    <h:form>
+                    <h:panelGrid columns="3">
+                        <h:outputLabel for="txtIdentificación" value="Identificación"
+                        ></h:outputLabel>
+                        <p:inputText id="txtIdentificación" label="Identificación" 
+                        size="30" value="#{controllerUsuario.sesion.identificacion}">
+                        </p:inputText>
+                        <h:messages for="txtCorreo" style="color: red"></h:messages>
+                        <h:outputLabel for="txtPassword" value="Contraseña"></h:outputLabel>
+                        <p:password id="txtPassword" label="Password" size="30"
+                        value="#{controllerUsuario.sesion.contrasena}"></p:password>
+                        <h:messages for="txtPassword" style="color: red"></h:messages>
+                        <h:panelGroup></h:panelGroup>
+                        <h:commandButton value="Iniciar Sesión" action="#{controllerUsuario.inicioSesion()}"></h:commandButton>
+                    </h:panelGrid>
+                        <br/><br/>
+                        
+                        <h:commandLink style="color: blue" value="Registrese para Iniciar Sesión" 
+                        action="/vistas/GestionInicioSesion"></h:commandLink>
+                </h:form>
                 </p:layoutUnit>
 
             </p:layout>

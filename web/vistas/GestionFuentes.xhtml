@@ -45,7 +45,7 @@
 
                         <p:commandButton value="Guardar"  process="@this, fieldFuentes" 
                             oncomplete="limpiar('fuentes')" 
-                            update="tableFuentes, growl"  actionListener="#{controllerTipoInstrumento.guardarTipoInstrumento()}"/>
+                            update="tableFuentes, growl"  actionListener="#{controllerFuentes.insertarFuentes()}"/>
                         <p:commandButton value="Cancelar" onclick="display_none('frmFuentes:fieldFuentes', 'fuentes')"/>
 
                     </h:panelGrid>   
@@ -54,7 +54,7 @@
                 <br/>
                 <p:dataTable id="tableFuentes" var="fuentes"   styleClass="tableDatos"
                 emptyMessage="No existen Fuentes" editable="true" style="width: 1000px;" 
-                paginator="true" rows="15" rowsPerPageTemplate="10,20" scrollable="true" scrollHeight="260" 
+                paginator="true" rows="15" rowsPerPageTemplate="10,20" scrollHeight="260" 
                 scrollWidth="1000" value="#{controllerFuentes.listaFuente}">
                     
                     <p:column headerText="Codigo" filterMatchMode="contains" style="width: 20%;" >
@@ -76,7 +76,7 @@
                     </p:column>
                 </p:dataTable>   
 
-                <p:dialog id="dialogoEditar" header="Editar Fuentes" modal="true" widgetVar="dialogoEditar">
+                <p:dialog id="dialogoEditar" header="Editar Fuentes" modal="true" widgetVar="dialogoEditarFuente">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="inputCodigoEdit" value="Codigo"/>
                         <p:inputText id="inputCodigoEdit"  value="#{controllerFuentes.fuente.codigo}" label="Codigo"  >

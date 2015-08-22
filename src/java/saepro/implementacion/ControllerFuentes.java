@@ -43,16 +43,16 @@ public class ControllerFuentes implements Serializable{
     private Estado estado;
     private List<Fuente> listaFuente;
     private List<Estado> listaEstados;
+    private static final Integer ESTADO_DESACTIVADO = 2;
 
     
     @PostConstruct
     public void init(){
-        
-        setFuente(new Fuente());
-        setEditarFuente(new Fuente());
-        setEstado(new Estado());
-        setListaFuente((List<Fuente>) new LinkedList());
-        setListaEstados((List<Estado>) new LinkedList());
+        editarFuente = new Fuente();
+        fuente = new Fuente();
+        estado = new Estado();
+        listaFuente = new LinkedList();
+        listaEstados = new LinkedList();
         listarFuentes();
         listarEstados();
     }
@@ -60,33 +60,40 @@ public class ControllerFuentes implements Serializable{
     
     public void insertarFuentes(){
         try{
+            System.out.println("Insertando Datos");
             if(!fuente.getDescripcion().trim().equals("")){
             estado = new Estado(1);
-            fuente.setEstado(estado); 
+            fuente.setId_estado(estado); 
             ejbFuenteFacadeLocal.create(fuente);
-            }
             listarFuentes();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_INFO, "Información", "Registro Exitoso"));
+            } 
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
+        (FacesMessage.SEVERITY_ERROR, "error", "No se Pudo Realizar Registro"));
         }
     }
 
     private void listarEstados () {
         try {
+            System.out.println("Listando Estados");
             listaEstados = ejbEstadoFacadeLocal.findAll();
+            setListaEstados(listaEstados);
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
+        (FacesMessage.SEVERITY_ERROR, "error", "Error al Listar los Datos"));  
         }
     }
     
     private void listarFuentes(){
         try {
+            System.out.println("Listando Fuentes");
             listaFuente = ejbFuenteFacadeLocal.findAll();
+            setListaFuente(listaFuente);
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage())); 
+        (FacesMessage.SEVERITY_ERROR, "error", "Error al Listar las Fuentes")); 
         }
     }
     
@@ -94,12 +101,12 @@ public class ControllerFuentes implements Serializable{
         try{
             fuente = ejbFuenteFacadeLocal.find(id);
             if(fuente != null){
-                fuente.setEstado(new Estado(2));
+                fuente.setId_estado(new Estado(ESTADO_DESACTIVADO));
                 ejbFuenteFacadeLocal.edit(fuente);
             }
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
+        (FacesMessage.SEVERITY_ERROR, "error", "Error al Cambiar Estado de la Fuente"));
         }
     }
     
@@ -108,12 +115,13 @@ public class ControllerFuentes implements Serializable{
             fuente = ejbFuenteFacadeLocal.find(id);
             if(fuente!= null){
                 editarFuente = fuente;
+                setEditarFuente(editarFuente);
                 RequestContext.getCurrentInstance().update("frmFuentes");
-                RequestContext.getCurrentInstance().execute("PF('dialogoEditar').show()");
+                RequestContext.getCurrentInstance().execute("PF('dialogoEditarFuente').show()");
             }
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
+        (FacesMessage.SEVERITY_ERROR, "error", "Error al Abrir Dialogo"));
         }
     }
     
@@ -124,7 +132,7 @@ public class ControllerFuentes implements Serializable{
             RequestContext.getCurrentInstance().update("frmFuentes");
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-        (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
+        (FacesMessage.SEVERITY_ERROR, "error", "Error al Editar Fuente"));
         }
     }
     

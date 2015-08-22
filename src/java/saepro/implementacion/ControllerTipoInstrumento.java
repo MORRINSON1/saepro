@@ -6,6 +6,8 @@
 
 package saepro.implementacion;
 
+import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -25,7 +27,7 @@ import saepro.modelo.TipoInstrumento;
  */
 @ManagedBean
 @ViewScoped
-public class ControllerTipoInstrumento {
+public class ControllerTipoInstrumento implements Serializable{
     
     @EJB
     EstadoFacadeLocal ejbEstado;
@@ -45,6 +47,8 @@ public class ControllerTipoInstrumento {
         tipoInstrumento = new TipoInstrumento();
         tipoInstrumentoEdit =  new TipoInstrumento();
         estado = new Estado();
+        listaTipoInstrumento = new LinkedList();
+        listaEstados = new LinkedList ();
         cargarEstados();
         cargarTipoInstrumento();
     }
@@ -52,6 +56,7 @@ public class ControllerTipoInstrumento {
     private void cargarEstados () {
         try {
             listaEstados = ejbEstado.findAll();
+            setListaEstados(listaEstados);
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
         (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
@@ -61,6 +66,7 @@ public class ControllerTipoInstrumento {
     private void cargarTipoInstrumento(){
         try {
             listaTipoInstrumento = ejbTipoInstrumento.findAll();
+            setListaTipoInstrumento(listaTipoInstrumento);
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
         (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
@@ -73,8 +79,11 @@ public class ControllerTipoInstrumento {
             estado = new Estado(1);
             tipoInstrumento.setEstado(estado);
             ejbTipoInstrumento.create(tipoInstrumento);
-            }
             cargarTipoInstrumento();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+        (FacesMessage.SEVERITY_INFO, "Información", "Registro Exitoso"));
+            }
+            
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
         (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));
@@ -99,6 +108,7 @@ public class ControllerTipoInstrumento {
             tipoInstrumento = ejbTipoInstrumento.find(id);
             if(tipoInstrumento!= null){
                 tipoInstrumentoEdit = tipoInstrumento;
+                setTipoInstrumentoEdit(tipoInstrumentoEdit);
                 RequestContext.getCurrentInstance().update("frmInstrumentos");
                 RequestContext.getCurrentInstance().execute("PF('dialogoEditar').show()");
             }
