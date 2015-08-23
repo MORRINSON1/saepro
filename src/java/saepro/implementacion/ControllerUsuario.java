@@ -128,11 +128,11 @@ public class ControllerUsuario {
         System.out.println("Informacion del objeto" + getIniciarSesion());
         try{
         if(getIniciarSesion() != null){
-            if(getIniciarSesion().getContrasena().equals(EncriptarPassword.sha512(getSesion().getContrasena()))){
-                return "/Templates/TemplatesPrincipal";
+            if(!EncriptarPassword.sha512(getSesion().getContrasena()).equals(getIniciarSesion().getContrasena())){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
+                    (FacesMessage.SEVERITY_ERROR, "Error: Contraseña Incorrecta", ""));
             }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
-            (FacesMessage.SEVERITY_ERROR, "Error: Contraseña Incorrecta", ""));
+                return "/Templates/TemplatesPrincipal";
             }
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage

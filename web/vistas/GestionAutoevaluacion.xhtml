@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+
+    </h:head>
+
+    <h:body>    
+        <h:form id="frmAutoevaluacion">
+            
+            <p:fieldset id="fieldAutoevaluacion" legend="Ingresar Autoevaluación">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <p:fieldset id="fieldInfoGral" legend="Información General">
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <h:outputLabel value="Número:" for="txtNumero"></h:outputLabel>
+                            <p:inputText id="txtNumero" label="Número" required="true"></p:inputText>
+                            
+                            <h:outputLabel value="Estado:" for="txtEstado"></h:outputLabel>
+                            <h:selectOneMenu value="" id="txtEstado" label="Estado">
+                                <f:selectItem itemLabel="En Construcción" itemValue=""></f:selectItem>
+                                <f:selectItem itemLabel="Terminada" itemValue=""></f:selectItem>
+                                <f:selectItem itemLabel="Aplicada" itemValue=""></f:selectItem>
+                            </h:selectOneMenu>
+                            
+                            <h:outputLabel value="Año:"  for="txtAño"></h:outputLabel>
+                            <p:spinner label="Año" id="txtAño" min="2006" max="2015" 
+                            value="2006"></p:spinner>
+                            
+                            <h:outputLabel value="Periodo:" for="txtPeriodo"></h:outputLabel>
+                            <h:selectOneMenu id="txtPeriodo" label="Periodo">
+                                <f:selectItem itemLabel="I" itemValue=""></f:selectItem>
+                                <f:selectItem itemLabel="II" itemValue=""></f:selectItem>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                        <br/>
+                        <h:panelGrid columns="2" cellpadding="4">
+                            <h:outputLabel value="Descripción:" for="txtDescripcion"></h:outputLabel>
+                            <p:inputTextarea id="txtDescripcion" label="Descripción"
+                            cols="48" rows="5" counter="display" maxlength="150" 
+                            counterTemplate="Máximo {0} Caracteres"></p:inputTextarea>
+                            <h:panelGroup></h:panelGroup>
+                            <h:outputText id="display"></h:outputText>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    
+                    <p:toolbar style="background-color: white; height: 40px">
+                        <f:facet name="left">
+                            <h:commandButton title="Agregar" class="agregarButton"></h:commandButton>
+                            <h:commandButton title="Consultar" class="consultarButton"></h:commandButton>
+                            <h:commandButton title="Actualizar" class="actualizarButton"></h:commandButton>
+                            <h:commandButton title="Eliminar" class="eliminarButton"></h:commandButton> 
+                        </f:facet>
+                    </p:toolbar>
+                </h:panelGrid>
+            </p:fieldset>
+            
+            <p:fieldset legend="Autoevaluación">
+                <p:fieldset legend="Factores" toggleable="true" toggleSpeed="500"
+                            collapsed="true">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <p:inputTextarea id="txtFactores" label="Factores" rows="5"
+                            cols="100" counter="display2" maxlength="500"
+                            counterTemplate="Máximo {0} Caracteres" ></p:inputTextarea>
+                            <h:outputText id="display2"></h:outputText>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="2" cellpadding="0">
+                            <h:commandButton title="Agregar" class="agregarButton"></h:commandButton>
+                            <h:commandButton title="Mover Arriba" class="arribaButton"></h:commandButton>
+                            <h:commandButton title="Eliminar" class="eliminarButton"></h:commandButton>
+                            <h:commandButton title="Mover Abajo" class="abajoButton"></h:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <p:fieldset legend="Carácterísticas de carácterísticas asociadas a los profesores"
+                            collapsed="true" toggleable="true" toggleSpeed="500">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <p:inputTextarea id="txtCaracteristicas" label="Caracteristicas" rows="5"
+                            cols="100" counter="display2" maxlength="500"
+                            counterTemplate="Máximo {0} Caracteres" ></p:inputTextarea>
+                            <h:outputText id="display2"></h:outputText>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="2" cellpadding="0">
+                            <h:commandButton title="Agregar" class="agregarButton"></h:commandButton>
+                            <h:commandButton title="Mover Arriba" class="arribaButton"></h:commandButton>
+                            <h:commandButton title="Eliminar" class="eliminarButton"></h:commandButton>
+                            <h:commandButton title="Mover Abajo" class="abajoButton"></h:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <p:fieldset legend="Indicadores de desarrollo profesoral" toggleable="true"
+                        collapsed="true" toggleSpeed="500">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <p:inputTextarea id="txtDesarrollo" label="desarrollo" rows="5"
+                            cols="100" counter="display3" maxlength="500"
+                            counterTemplate="Máximo {0} Caracteres" ></p:inputTextarea>
+                            <h:outputText id="display3"></h:outputText>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="2" cellpadding="0">
+                            <h:commandButton title="Agregar" class="agregarButton"></h:commandButton>
+                            <h:commandButton title="Mover Arriba" class="arribaButton"></h:commandButton>
+                            <h:commandButton title="Eliminar" class="eliminarButton"></h:commandButton>
+                            <h:commandButton title="Mover Abajo" class="abajoButton"></h:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <p:fieldset legend="Preguntas de" toggleable="true" toggleSpeed="500" collapsed="true">
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <p:inputTextarea id="txtPreguntas" label="Preguntas" rows="5"
+                            cols="100" counter="display4" maxlength="500"
+                            counterTemplate="Máximo {0} Caracteres" ></p:inputTextarea>
+                            <h:outputText id="display4"></h:outputText>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="2" cellpadding="0">
+                            <h:commandButton title="Agregar" class="agregarButton"></h:commandButton>
+                            <h:commandButton title="Mover Arriba" class="arribaButton"></h:commandButton>
+                            <h:commandButton title="Eliminar" class="eliminarButton"></h:commandButton>
+                            <h:commandButton title="Mover Abajo" class="abajoButton"></h:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Guardar"></p:commandButton>
+                    <p:commandButton value="Cancelar"></p:commandButton>   
+                </h:panelGrid>                
+        </p:fieldset>
+        </h:form>
+    </h:body>
+</html>

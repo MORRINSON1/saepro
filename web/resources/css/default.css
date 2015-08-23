@@ -51,6 +51,53 @@ a:link:hover, a:visited:hover  {
      height:24px;
 }
 
+.agregarButton {
+    background: url("../imagenes/agregar.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.consultarButton {
+    background: url("../imagenes/consultar.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.actualizarButton {
+    background: url("../imagenes/actualizar.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.eliminarButton {
+    background: url("../imagenes/eliminar.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.arribaButton {
+    background: url("../imagenes/arriba.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.abajoButton {
+    background: url("../imagenes/abajo.png") no-repeat !important;
+    width:55px;
+    height:55px;
+    border-style: none;
+}
+
+.buttons{
+    width:30px;
+    height:30px;
+}
+
 .buttonDelete {
      margin-left: 20px;
 }

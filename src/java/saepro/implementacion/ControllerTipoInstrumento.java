@@ -44,19 +44,18 @@ public class ControllerTipoInstrumento implements Serializable{
     
     @PostConstruct
     public void init(){
-        tipoInstrumento = new TipoInstrumento();
-        tipoInstrumentoEdit =  new TipoInstrumento();
-        estado = new Estado();
-        listaTipoInstrumento = new LinkedList();
-        listaEstados = new LinkedList ();
+        this.setTipoInstrumento(new TipoInstrumento());
+        this.setTipoInstrumentoEdit(new TipoInstrumento());
+        this.setEstado(new Estado());
+        this.listaTipoInstrumento = new LinkedList();
+        this.listaEstados = new LinkedList ();
         cargarEstados();
         cargarTipoInstrumento();
     }
     
     private void cargarEstados () {
         try {
-            listaEstados = ejbEstado.findAll();
-            setListaEstados(listaEstados);
+            setListaEstados(ejbEstado.findAll());
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
         (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
@@ -65,8 +64,7 @@ public class ControllerTipoInstrumento implements Serializable{
     
     private void cargarTipoInstrumento(){
         try {
-            listaTipoInstrumento = ejbTipoInstrumento.findAll();
-            setListaTipoInstrumento(listaTipoInstrumento);
+            setListaTipoInstrumento(ejbTipoInstrumento.findAll());
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
         (FacesMessage.SEVERITY_ERROR, "error", ex.getMessage()));  
@@ -76,8 +74,7 @@ public class ControllerTipoInstrumento implements Serializable{
     public void guardarTipoInstrumento(){
         try {
             if(!tipoInstrumento.getDescripcion().trim().equals("")){
-            estado = new Estado(1);
-            tipoInstrumento.setEstado(estado);
+            tipoInstrumento.setEstado(new Estado(1));
             ejbTipoInstrumento.create(tipoInstrumento);
             cargarTipoInstrumento();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
@@ -92,10 +89,10 @@ public class ControllerTipoInstrumento implements Serializable{
     
     public void cambiarEstadoTipoInstrumento(Integer id){
         try{
-            tipoInstrumento = ejbTipoInstrumento.find(id);
-            if(tipoInstrumento != null){
-                tipoInstrumento.setEstado(new Estado(ESTADO_DESACTIVADO));
-                ejbTipoInstrumento.edit(tipoInstrumento);
+            setTipoInstrumento(ejbTipoInstrumento.find(id));
+            if(getTipoInstrumento() != null){
+                getTipoInstrumento().setEstado(new Estado(ESTADO_DESACTIVADO));
+                ejbTipoInstrumento.edit(getTipoInstrumento());
             }
         }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage
@@ -105,10 +102,9 @@ public class ControllerTipoInstrumento implements Serializable{
     
     public void abrirDialog(Integer id){
         try {
-            tipoInstrumento = ejbTipoInstrumento.find(id);
-            if(tipoInstrumento!= null){
-                tipoInstrumentoEdit = tipoInstrumento;
-                setTipoInstrumentoEdit(tipoInstrumentoEdit);
+            setTipoInstrumento(ejbTipoInstrumento.find(id));
+            if(getTipoInstrumento() != null){
+                setTipoInstrumentoEdit(getTipoInstrumento());
                 RequestContext.getCurrentInstance().update("frmInstrumentos");
                 RequestContext.getCurrentInstance().execute("PF('dialogoEditar').show()");
             }
@@ -120,7 +116,7 @@ public class ControllerTipoInstrumento implements Serializable{
     
     public void editarTipoInstrumento(){
         try {
-            ejbTipoInstrumento.edit(tipoInstrumentoEdit);
+            ejbTipoInstrumento.edit(getTipoInstrumentoEdit());
             cargarTipoInstrumento();
             RequestContext.getCurrentInstance().update("frmInstrumentos");
         }catch(Exception ex){
